@@ -1,13 +1,14 @@
 ---
-title: "Graficación" 
+title: "Ingresos PIB per cápita" 
 author: "Lumen Wong" 
 format: html 
 toc: true 
 lang: es
 ---
 
-# Carga de paquetes
+
 ```{r}
+#| echo: false
 #| label: carga-paquetes
 #| warning: false
 #| message: false
@@ -20,15 +21,18 @@ library(plotly)
 library(ggplot2)
 ```
 
-# Carga de datos
+
 ```{r}
+#| echo: false
 #| label: carga-datos
 #| warning: false
 #| message: false
 paises <- read_csv("paises.csv")
 ```
-# Tabla de datos de paises
+
+# Tabla n°1 Datos PIB per cápita por país
 ```{r}
+#| echo: false
 #| label: tabla-paises
 #| warning: false
 #| message: false
@@ -40,19 +44,10 @@ paises |>
     language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
   ))
 ```
-# # ggplot2 Gráfico de dispersión de PIB per cápita vs esperanza de vida al nacer
+# Gráfico N° 1 Distribución de ingresos PIB per cápita según esperanza de vida al nacer por continente
 ```{r}
+#| echo: false
 #| label: grafico-01
-#| warning: false
-#| message: false
-paises |>
-  ggplot(aes(x = GDP_PC, y = LIFE_EXPECTANCY, shape = CONTINENT)) +
-  geom_point() +
-  scale_x_continuous(labels = comma, limits = c(0, NA))
-```
-# Gráfico de dispersión de PIB per cápita vs esperanza de vida al nacer
-```{r}
-#| label: grafico-02
 #| warning: false
 #| message: false
 paises |>
@@ -60,10 +55,10 @@ paises |>
   geom_point() +
   scale_x_continuous(labels = comma, limits = c(0, NA))
 ```
-# Gráfico de dispersión de PIB per cápita vs esperanza de vida al nacer
-# con formas y colores correspondientes al continente
+# Gráfico N° 1.1 Distribución de ingresos PIB per cápita según esperanza de vida al nacer por continente
 ```{r}
-#| label: grafico-03
+#| echo: false
+#| label: grafico-02
 #| warning: false
 #| message: false
 paises |>
@@ -73,10 +68,10 @@ paises |>
   scale_shape_manual(values = c(0, 1, 2, 3, 4, 5, 6, 7)) +
   scale_color_manual(values = c("red", "blue", "green", "purple", "orange", "brown", "pink", "yellow"))
 ```
-# Gráfico de dispersión de PIB per cápita vs esperanza de vida al nacer
-# con tamaño de puntos correspondiente a la población
+# Gráfico N° 2 Distribución de ingresos PIB per cápita según esperanza de vida al nacer por continente y estimación de población
 ```{r}
-#| label: grafico-04
+#| echo: false
+#| label: grafico-03
 #| warning: false
 #| message: false
 paises |>
@@ -85,48 +80,36 @@ paises |>
   scale_size_continuous(labels = comma) +
   scale_x_continuous(labels = comma, limits = c(0, NA))
 ```
-## PIB per cápita vs esperanza de vida al nacer con linea de tendencia
+# Gráfico N° 3 Línea de tendencia de ingresos PIB per cápita según esperanza de vida al nacer por continente 
 ```{r}
-#| label: grafico-05
+#| echo: false
+#| label: grafico-04
 #| warning: false
 #| message: false
 paises |>
-  ggplot(aes(x = GDP_PC, y = LIFE_EXPECTANCY)) +
+  ggplot(aes(x = GDP_PC, y = LIFE_EXPECTANCY, shape = CONTINENT)) +
   geom_point() +
   geom_smooth(method = 'lm') +
   scale_x_continuous(labels = comma, limits = c(0, NA))
 ```
-# Gráfico de dispersión de PIB per cápita vs esperanza de vida al nacer
-# en África y Europa coloreado por continente
-# + curva de tendencia
+# Gráfico N° 4 Distribución de ingresos PIB per cápita según esperanza de vida al nacer en África y Europa
 ```{r}
+#| echo: false
+#| label: grafico-05
+#| warning: false
+#| message: false
+paises |>
+  filter(CONTINENT == 'Africa' | CONTINENT == 'Europe') |>
+  ggplot(aes(x = GDP_PC, y = LIFE_EXPECTANCY, color = CONTINENT)) +
+  geom_point() +
+  geom_smooth() +
+  scale_x_continuous(labels = comma, limits = c(0, NA)) +
+  scale_y_continuous(labels = comma, limits = c(50, 90))
+```
+# Gráfico N° 5 Distribución de ingresos PIB per cápita según esperanza de vida al nacer por continente 
+```{r}
+#| echo: false
 #| label: grafico-06
-#| warning: false
-#| message: false
-paises |>
-  filter(CONTINENT == 'Africa' | CONTINENT == 'Europe') |>
-  ggplot(aes(x = GDP_PC, y = LIFE_EXPECTANCY, color = CONTINENT)) +
-  geom_point() +
-  geom_smooth() +
-  scale_x_continuous(labels = comma, limits = c(0, NA)) +
-  scale_y_continuous(labels = comma, limits = c(50, 90))
-```
-## Títulos, etiquetas, estilos y colores # Gráfico de dispersión de PIB per cápita vs esperanza de vida al nacer # en África y Europa coloreado por continente # + curva de tendencia
-```{r}
-#| label: grafico-07
-#| warning: false
-#| message: false
-paises |>
-  filter(CONTINENT == 'Africa' | CONTINENT == 'Europe') |>
-  ggplot(aes(x = GDP_PC, y = LIFE_EXPECTANCY, color = CONTINENT)) +
-  geom_point() +
-  geom_smooth() +
-  scale_x_continuous(labels = comma, limits = c(0, NA)) +
-  scale_y_continuous(labels = comma, limits = c(50, 90))
-```
-# Gráfico de dispersión de PIB per cápita vs esperanza de vida al nacer # + paneles por continente
-```{r}
-#| label: grafico-08
 #| warning: false
 #| message: false
 paises |>
@@ -135,9 +118,10 @@ paises |>
   facet_wrap(~ CONTINENT, nrow = 2) +
   scale_x_continuous(labels = comma, limits = c(0, NA))
 ```
-# Gráfico de dispersión de PIB per cápita vs esperanza de vida al nacer # + paneles por región y subregión de la ONU
+# Gráfico N° 6 Distribución de ingresos PIB per cápita según esperanza de vida al nacer por región y subregión de la ONU
 ```{r}
-#| label: grafico-09
+#| echo: false
+#| label: grafico-07
 #| warning: false
 #| message: false
 paises |>
@@ -146,29 +130,11 @@ paises |>
   facet_grid(REGION_UN ~ INCOME_GRP) +
   scale_x_continuous(labels = comma, limits = c(0, NA))
 ```
-## Títulos, etiquetas, estilos y colores # Gráfico de dispersión de PIB per cápita vs esperanza de vida al nacer # en África y Europa coloreado por continente # + curva de tendencia
+
+# Gráfico N° 7 Distribución de ingresos y línea de tendencia del PIB per cápita según esperanza de vida al nacer por continente
 ```{r}
-#| label: grafico-10
-#| warning: false
-#| message: false
-paises |>
-  filter(CONTINENT == 'Africa' | CONTINENT == 'Europe') |>
-  ggplot(aes(x = GDP_PC, y = LIFE_EXPECTANCY, color = CONTINENT)) +
-  geom_point() +
-  geom_smooth() +
-  scale_x_continuous(labels = comma, limits = c(0, NA)) +
-  scale_y_continuous(labels = comma, limits = c(50, 90)) +
-  ggtitle("PIB per cápita vs esperanza de vida al nacer por continente") +
-  xlab("PIB per cápita  (USD)") +
-  ylab("Esperanza de vida (años)") +
-  labs(subtitle = "Datos de África y Europa",
-       caption = "Fuentes: Natural Earth y Banco Mundial",
-       color = "Continente")
-```
-# Gráfico de dispersión de PIB per cápita vs esperanza de vida al nacer 
-# en África y Europa coloreado por continente # + curva de tendencia
-```{r}
-#| label: grafico-11
+#| echo: false
+#| label: grafico-08
 #| warning: false
 #| message: false
 paises |>
@@ -186,10 +152,10 @@ paises |>
   scale_colour_brewer(palette = "YlOrBr", direction = -1) +
   theme_ipsum() # estilo de hrbrthemes
 ```
-# Ploty
-# Gráfico de dispersión de PIB per cápita vs esperanza de vida al nacer interactivo
+# Gráfico interactivo N° 8 Distribución de ingresos PIB per cápita según esperanza de vida al nacer por cpntinente
 ```{r}
-#| label: grafico-12
+#| echo: false
+#| label: grafico-09
 #| warning: false
 #| message: false
 grafico_ggplot2 <-
@@ -214,9 +180,8 @@ grafico_ggplot2 <-
   theme_ipsum() # estilo de hrbrthemes
 ```
 
-#Convertir en un gráfico interactivo
-# Gráfico de dispersión de PIB per cápita vs esperanza de vida al nacer interactivo
 ```{r}
+#| echo: false
 #| label: grafico-13
 #| warning: false
 #| message: false
